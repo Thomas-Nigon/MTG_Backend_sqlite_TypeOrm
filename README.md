@@ -64,7 +64,7 @@ To run this project, you'll need to have the following installed:
 
 ## Project Structure
 
-\`\`\`bash
+```bash
 MTG_Backend_sqlite_TypeOrm/
 │
 ├── src/
@@ -81,7 +81,7 @@ MTG_Backend_sqlite_TypeOrm/
 ├── ormconfig.json
 ├── package.json
 └── README.md
-\`\`\`
+
 
 - **Entities**: Defines the data models for the MTG cards and their associated image URIs.
 - **Routes**: Contains the API routes for card-related actions.
