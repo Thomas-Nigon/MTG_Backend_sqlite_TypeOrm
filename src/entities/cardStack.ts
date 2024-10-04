@@ -16,11 +16,11 @@ export class CardStack extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  /*   @ManyToOne(() => Card, (card) => card.cardStacks, {
+  @ManyToOne(() => Card, (card) => card.cardStacks, {
     cascade: true,
     eager: true,
   })
-  card!: Card; */
+  card!: Card;
 
   @Column()
   quantity!: number;

@@ -5,9 +5,11 @@ import {
   Column,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from "typeorm";
 import { CardImageUris } from "./CardimageUris";
 import { CardPrice } from "./CardPrice";
+import { CardStack } from "./cardStack";
 
 @Entity()
 export class Card extends BaseEntity {
@@ -66,6 +68,7 @@ export class Card extends BaseEntity {
   @OneToOne(() => CardPrice, { cascade: true, eager: true })
   @JoinColumn()
   prices!: CardPrice;
+
+  @OneToMany(() => CardStack, (cardStack) => cardStack.card)
+  cardStacks!: CardStack[];
 }
-/*   @OneToMany(() => CardStack, (cardStack) => cardStack.card)
-  cardStacks!: CardStack[]; */
