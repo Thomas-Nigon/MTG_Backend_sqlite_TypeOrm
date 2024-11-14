@@ -67,4 +67,30 @@ export class DeckResolver {
       }
     }
   }
+
+  /**
+   * Retrieves all decks owned by a specific user.
+   * @param {string} userId - The ID of the user whose decks are to be retrieved.
+   * @returns {Promise<Deck[]>} A promise that resolves to an array of decks owned by the user.
+   * @throws {Error} Throws an error if the user is not found or if no decks are found for the user.
+   */
+  @Query(() => [Deck])
+  async getDecksByUser(@Arg("userId") userId: string) {
+    const user = await User.findOneBy({ id: userId });
+    if (!user) throw new Error("No user found");
+    const decks = await Deck.find({ where: { ownerId: user.id } });
+    if (!decks) throw new Error("No decks found");
+    return decks;
+  }
+
+  /**
+   * Deletes a deck by its ID.
+   * @param {string} id - The ID of the deck to be deleted.
+   * @returns {Promise<boolean>} A promise that resolves to true if the deck was successfully deleted, otherwise false.
+   */
+  @Mutation(() => Boolean)
+  async deleteDeck(@Arg("id") id: string) {
+    const result = await Deck.delete(id);
+    return result.affected === 1;
+  }
 }
