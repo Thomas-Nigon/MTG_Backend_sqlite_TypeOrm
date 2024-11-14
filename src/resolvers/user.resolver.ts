@@ -3,6 +3,7 @@ import { Arg, Field, InputType, Mutation, Query } from "type-graphql";
 import { Resolver } from "type-graphql";
 import { User } from "../typeDefs/user.typeDefs";
 import { BaseEntity } from "typeorm";
+import argon2 from "argon2";
 
 @InputType()
 export class UserInput extends BaseEntity {
@@ -42,19 +43,15 @@ export class UserResolver {
   }
 
   /**
-   * Adds a new user.
+   * Create a new user.
    * @param {UserInput} data - The user data.
    * @returns {Promise<User>} A promise that resolves to the newly created user.
    */
   @Mutation(() => User)
-  async addUser(@Arg("data") { username, email, password }: UserInput) {
+  async createUser(@Arg("data") { username, email, password }: UserInput) {
     const user = User.create({ username, email, password });
     await user.save();
-    return {
-      user,
-      success: true,
-      message: "User created successfully",
-    };
+    return user;
   }
 
   /**
