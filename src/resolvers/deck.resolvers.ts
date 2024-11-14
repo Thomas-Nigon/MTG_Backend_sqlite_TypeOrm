@@ -3,6 +3,7 @@ import { BaseEntity } from "typeorm";
 import { User } from "../typeDefs/user.typeDefs";
 import { Deck } from "../typeDefs/deck.typeDefs";
 import { CardStack } from "../typeDefs/cardStack.typeDefs";
+import { ApolloError } from "apollo-server-errors";
 
 @InputType()
 class DeckInput extends BaseEntity {
@@ -19,7 +20,7 @@ class DeckInput extends BaseEntity {
   ownerId!: string;
 
   @Field(() => [CardStack])
-  deck!: CardStack[];
+  cardStacks!: CardStack[];
 }
 
 @Resolver(Deck)
@@ -30,27 +31,40 @@ export class DeckResolver {
    */
   @Query(() => [Deck])
   async getDecks() {
-    return await Deck.find();
+    const decks = await Deck.find();
+    if (!decks) throw new Error("No decks found");
+    return decks;
   }
 
+  /**
+   * Creates a new deck.
+   * @param {DeckInput} data - The input data for creating a deck, including card stacks, name, description, and owner ID.
+   * @returns {Promise<Deck>} A promise that resolves to the newly created deck.
+   * @throws {Error} Throws an error if no card stacks are provided or if there is an internal server error.
+   */
   @Mutation(() => Deck)
   async createDeck(
-    @Arg("data") { deck, name, description, ownerId }: DeckInput
+    @Arg("data") { cardStacks, name, description, ownerId }: DeckInput
   ) {
     try {
-      if (!deck) throw new Error("No deck provided");
+      if (!cardStacks) throw new Error("No deck provided");
 
       const newDeck = new Deck();
       newDeck.name = name;
       newDeck.description = description;
       newDeck.ownerId = ownerId;
-      //newDeck.cards = deck;
+      newDeck.cardStacks = cardStacks;
       await newDeck.save();
       console.log("newDeck created");
-      return res.status(201).json(newDeck);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error creating deck" });
+      return newDeck;
+    } catch (error: any) {
+      if (error instanceof Error) {
+        console.error("Error creating deck:", error.message);
+        throw new Error(error.message);
+      } else {
+        console.error("Error creating deck:", error);
+        throw new Error("Internal server error");
+      }
     }
   }
 }

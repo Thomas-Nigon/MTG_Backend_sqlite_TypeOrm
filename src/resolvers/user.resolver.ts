@@ -24,7 +24,9 @@ export class UserResolver {
    */
   @Query(() => [User])
   async getUsers() {
-    return await User.find();
+    const users = await User.find();
+    if (!users) throw new Error("No users found");
+    return users;
   }
 
   /**
@@ -34,7 +36,9 @@ export class UserResolver {
    */
   @Query(() => User)
   async getUserById(@Arg("id") id: string) {
-    return await User.findOneBy({ id });
+    const user = await User.findOneBy({ id });
+    if (!user) throw new Error("User not found");
+    return user;
   }
 
   /**
@@ -46,7 +50,11 @@ export class UserResolver {
   async addUser(@Arg("data") { username, email, password }: UserInput) {
     const user = User.create({ username, email, password });
     await user.save();
-    return user;
+    return {
+      user,
+      success: true,
+      message: "User created successfully",
+    };
   }
 
   /**
@@ -62,7 +70,11 @@ export class UserResolver {
     if (!user) throw new Error("User not found");
     Object.assign(user, data);
     await user.save();
-    return user;
+    return {
+      user,
+      success: true,
+      message: "User updated successfully",
+    };
   }
 
   /**

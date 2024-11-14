@@ -55,7 +55,7 @@ export class Card extends BaseEntity {
   @Column({ length: 255, nullable: true })
   type_line!: string;
 
-  @Field(() => [String])
+  @Field(() => [String], { nullable: true })
   @Column({ type: "simple-array", nullable: true })
   colors!: string[];
 
