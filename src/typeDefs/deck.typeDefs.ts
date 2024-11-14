@@ -31,7 +31,7 @@ export class Deck extends BaseEntity {
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.decks)
-  ownerId!: User;
+  ownerId!: string;
 
   @Field(() => [CardStack])
   @OneToMany(() => CardStack, (cardStack) => cardStack.deck, { cascade: true })
