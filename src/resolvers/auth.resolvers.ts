@@ -5,6 +5,13 @@ import { Arg, Mutation, Resolver } from "type-graphql";
 
 @Resolver(User)
 export class AuthResolver {
+  /**
+   * Authenticates a user by verifying their email and password.
+   * @param {string} email - The email of the user.
+   * @param {string} password - The password of the user.
+   * @returns {Promise<string>} A promise that resolves to a JWT access token.
+   * @throws Will throw an error if the secret is not found, the user is not found, or the password is invalid.
+   */
   @Mutation(() => String)
   async auth(@Arg("email") email: string, @Arg("password") password: string) {
     const secret = process.env.APP_SECRET;

@@ -54,8 +54,8 @@ export class DeckResolver {
       newDeck.description = description;
       newDeck.ownerId = ownerId;
       newDeck.cardStacks = cardStacks;
+
       await newDeck.save();
-      console.log("newDeck created");
       return newDeck;
     } catch (error: any) {
       if (error instanceof Error) {
@@ -79,6 +79,7 @@ export class DeckResolver {
     const user = await User.findOneBy({ id: userId });
     if (!user) throw new Error("No user found");
     const decks = await Deck.find({ where: { ownerId: user.id } });
+
     if (!decks) throw new Error("No decks found");
     return decks;
   }
