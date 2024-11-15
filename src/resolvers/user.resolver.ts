@@ -3,7 +3,6 @@ import { Arg, Field, InputType, Mutation, Query } from "type-graphql";
 import { Resolver } from "type-graphql";
 import { User } from "../typeDefs/user.typeDefs";
 import { BaseEntity } from "typeorm";
-import argon2 from "argon2";
 
 @InputType()
 export class UserInput extends BaseEntity {

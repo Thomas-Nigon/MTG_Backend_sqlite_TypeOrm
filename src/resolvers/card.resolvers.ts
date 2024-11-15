@@ -1,6 +1,8 @@
 import { Arg, Field, InputType } from "type-graphql";
 import { Query } from "type-graphql";
 import { Card } from "../typeDefs/cards.typeDefs";
+import { getCardsColors } from "../controllers/cardController";
+import { Like } from "typeorm";
 
 @InputType()
 class CardQuery {
@@ -73,6 +75,73 @@ export class CardResolver {
     } catch (error) {
       console.error(error);
       throw new Error("Error getting cards");
+    }
+  }
+
+  /**
+   * Retrieves a list of unique card colors.
+   * @returns {Promise<string[]>} A promise that resolves to an array of unique card colors.
+   * @throws Will throw an error if there is an issue retrieving card colors.
+   */
+  @Query(() => [String])
+  async getCardsColors() {
+    try {
+      const colors = await Card.find({
+        select: ["colors"],
+      });
+      const uniqueColors = [
+        ...new Set(colors.flatMap((color) => color.colors)),
+      ];
+      return uniqueColors;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error getting colors");
+    }
+  }
+
+  /**
+   * Retrieves a list of unique card types.
+   * @param {string} type_line - The type line to filter card types.
+   * @returns {Promise<string[]>} A promise that resolves to an array of unique card types.
+   * @throws Will throw an error if there is an issue retrieving card types.
+   */
+  @Query(() => [String])
+  async getCardsTypes(@Arg("type_line") type_line: string) {
+    let whereClause = {};
+    if (type_line) {
+      whereClause = { ...whereClause, type_line: type_line as string };
+    }
+    try {
+      const types = await Card.find({
+        select: ["type_line"],
+      });
+      const uniqueTypes = [...new Set(types.flatMap((t) => t.type_line))];
+      return uniqueTypes;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error getting types");
+    }
+  }
+
+  /**
+   * Retrieves a list of 10 cards by autocomplete name.
+   * @param {string} name - The name or partial name of the card to search for.
+   * @returns {Promise<Card[]>} A promise that resolves to an array of Card objects.
+   * @throws Will throw an error if there is an issue retrieving the card.
+   */
+  @Query(() => [Card])
+  async getCardByName(@Arg("name") name: string) {
+    try {
+      const card = await Card.find({
+        where: {
+          name: Like(`%${name}%`),
+        },
+        take: 10,
+      });
+      return card;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error getting card");
     }
   }
 }

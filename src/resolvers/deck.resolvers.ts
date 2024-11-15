@@ -3,7 +3,6 @@ import { BaseEntity } from "typeorm";
 import { User } from "../typeDefs/user.typeDefs";
 import { Deck } from "../typeDefs/deck.typeDefs";
 import { CardStack } from "../typeDefs/cardStack.typeDefs";
-import { ApolloError } from "apollo-server-errors";
 
 @InputType()
 class DeckInput extends BaseEntity {
