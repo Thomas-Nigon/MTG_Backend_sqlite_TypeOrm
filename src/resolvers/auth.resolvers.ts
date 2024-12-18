@@ -1,6 +1,6 @@
 import argon2 from "argon2";
 import { SignJWT } from "jose";
-import { User } from "../typeDefs/user.typeDefs";
+import { User } from "../entities/user.typeDefs";
 import { Arg, Mutation, Resolver } from "type-graphql";
 
 @Resolver(User)

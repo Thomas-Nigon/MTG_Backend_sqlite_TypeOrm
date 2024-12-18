@@ -1,4 +1,4 @@
-import { ObjectType } from "type-graphql";
+import { InputType, ObjectType } from "type-graphql";
 import { ID } from "type-graphql";
 import { Field } from "type-graphql";
 import {
@@ -12,6 +12,18 @@ import {
 } from "typeorm";
 import argon2 from "argon2";
 import { Deck } from "./deck.typeDefs";
+
+@InputType()
+export class UserInput extends BaseEntity {
+  @Field({ nullable: true })
+  username?: string;
+
+  @Field({ nullable: true })
+  email?: string;
+
+  @Field({ nullable: true })
+  password?: string;
+}
 
 @Entity()
 @ObjectType()

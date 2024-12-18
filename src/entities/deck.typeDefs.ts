@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -8,7 +8,25 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./user.typeDefs";
-import { CardStack } from "./cardStack.typeDefs";
+import { CardStack, CardStackInput } from "./cardStack.typeDefs";
+
+@InputType()
+export class DeckInput extends BaseEntity {
+  @Field()
+  name!: string;
+
+  @Field()
+  description!: string;
+
+  @Field()
+  img_url!: string;
+
+  @Field()
+  ownerId!: string;
+
+  @Field(() => [CardStackInput])
+  cardStacks!: CardStackInput[];
+}
 
 @Entity()
 @ObjectType()

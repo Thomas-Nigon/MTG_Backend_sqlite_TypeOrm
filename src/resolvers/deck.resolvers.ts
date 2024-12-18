@@ -1,26 +1,8 @@
-import { Arg, Field, InputType, Mutation, Query, Resolver } from "type-graphql";
-import { BaseEntity } from "typeorm";
-import { User } from "../typeDefs/user.typeDefs";
-import { Deck } from "../typeDefs/deck.typeDefs";
-import { CardStack } from "../typeDefs/cardStack.typeDefs";
-
-@InputType()
-class DeckInput extends BaseEntity {
-  @Field()
-  name!: string;
-
-  @Field()
-  description!: string;
-
-  @Field()
-  img_url!: string;
-
-  @Field()
-  ownerId!: string;
-
-  @Field(() => [CardStack])
-  cardStacks!: CardStack[];
-}
+import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { User } from "../entities/user.typeDefs";
+import { Deck, DeckInput } from "../entities/deck.typeDefs";
+import { CardStack } from "../entities/cardStack.typeDefs";
+import { Card } from "../entities/cards.typeDefs";
 
 @Resolver(Deck)
 export class DeckResolver {
@@ -52,7 +34,27 @@ export class DeckResolver {
       newDeck.name = name;
       newDeck.description = description;
       newDeck.ownerId = ownerId;
-      newDeck.cardStacks = cardStacks;
+      //newDeck.cardStacks = cardStacks;
+      const transformedCardStacks = await Promise.all(
+        cardStacks.map(async (cardStackInput) => {
+          const card = await Card.findOneBy({
+            id: parseInt(cardStackInput.cardId),
+          });
+
+          if (!card) {
+            throw new Error(`Card with id ${cardStackInput.cardId} not found`);
+          }
+
+          // Create a new CardStack entity
+          const cardStack = new CardStack();
+          cardStack.card = card; // Assign the found Card entity
+          cardStack.quantity = cardStackInput.quantity;
+
+          return cardStack;
+        })
+      );
+
+      newDeck.cardStacks = transformedCardStacks;
 
       await newDeck.save();
       return newDeck;
@@ -94,3 +96,35 @@ export class DeckResolver {
     return result.affected === 1;
   }
 }
+/*    const transformedCardStacks: CardStack[] = await Promise.all(
+        cardStacks.map(async (input) => {
+          const cardStack = new CardStack();
+          cardStack.card = input.card;
+          cardStack.quantity = input.quantity;
+          await cardStack.save();
+          return cardStack;
+        })
+      );
+      newDeck.cardStacks = transformedCardStacks; */
+
+// Transform CardStackInput to CardStack entities
+/*      const transformedCardStacks = await Promise.all(
+        cardStacks.map(async (cardStackInput) => {
+          const card = await Card.findOneBy({
+            id: parseInt(cardStackInput.card.id),
+          });
+
+          if (!card) {
+            throw new Error(`Card with id ${cardStackInput.card.id} not found`);
+          }
+
+          // Create a new CardStack entity
+          const cardStack = new CardStack();
+          cardStack.card = card; // Assign the found Card entity
+          cardStack.quantity = cardStackInput.quantity;
+
+          return cardStack;
+        })
+      ); */
+
+//newDeck.cardStacks = transformedCardStacks;

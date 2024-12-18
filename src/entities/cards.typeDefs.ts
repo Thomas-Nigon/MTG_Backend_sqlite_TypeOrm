@@ -1,4 +1,4 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
 import {
   Entity,
   BaseEntity,
@@ -8,9 +8,86 @@ import {
   OneToOne,
   OneToMany,
 } from "typeorm";
-import { CardStack } from "./cardStack.typeDefs";
-import { CardImageUris } from "./cardImageUris.typeDefs";
-import { CardPrice } from "./CardPrice.typeDefs";
+import { CardStack, CardStackInput } from "./cardStack.typeDefs";
+import { CardImageUris, CardImageUrisInput } from "./cardImageUris.typeDefs";
+import { CardPrice, CardPriceInput } from "./CardPrice.typeDefs";
+
+@InputType()
+export class CardQuery {
+  @Field({ nullable: true })
+  rarity?: string;
+  @Field({ nullable: true })
+  colors?: string;
+  @Field({ nullable: true })
+  set?: string;
+  @Field({ nullable: true })
+  currentPage?: number;
+  @Field({ nullable: true })
+  size?: number;
+  @Field({ nullable: true })
+  type?: string;
+}
+
+@InputType()
+export class CardInput {
+  @Field()
+  id!: string;
+
+  @Field()
+  card_id?: string;
+
+  @Field({ nullable: true })
+  oracle_id?: string;
+
+  @Field({ nullable: true })
+  name?: string;
+
+  @Field({ nullable: true })
+  lang?: string;
+
+  @Field({ nullable: true })
+  released_at?: string;
+
+  @Field(() => CardImageUrisInput, { nullable: true })
+  image_uris?: CardImageUrisInput;
+
+  @Field({ nullable: true })
+  mana_cost?: string;
+
+  @Field({ nullable: true })
+  cmc?: number;
+
+  @Field({ nullable: true })
+  type_line?: string;
+
+  @Field(() => [String], { nullable: true })
+  colors?: string[];
+
+  @Field(() => [String], { nullable: true })
+  color_identity?: string[];
+
+  @Field(() => [String], { nullable: true })
+  produced_mana?: string[];
+
+  @Field({ nullable: true })
+  set?: string;
+
+  @Field({ nullable: true })
+  set_name?: string;
+
+  @Field({ nullable: true })
+  rarity?: string;
+
+  @Field({ nullable: true })
+  border_color?: string;
+
+  @Field(() => CardPriceInput, { nullable: true })
+  prices?: CardPriceInput;
+
+  @Field(() => [CardStackInput])
+  cardStacks?: CardStackInput[];
+}
+
 @Entity()
 @ObjectType()
 export class Card extends BaseEntity {
@@ -91,4 +168,12 @@ export class Card extends BaseEntity {
   @Field(() => [CardStack])
   @OneToMany(() => CardStack, (cardStack) => cardStack.card)
   cardStacks!: CardStack[];
+}
+
+@ObjectType()
+export class set {
+  @Field()
+  name!: string;
+  @Field()
+  value!: string;
 }

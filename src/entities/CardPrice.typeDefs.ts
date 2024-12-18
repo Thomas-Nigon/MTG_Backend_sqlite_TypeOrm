@@ -1,5 +1,22 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+@InputType()
+export class CardPriceInput {
+  @Field()
+  usd!: string;
+  @Field()
+  usd_foil!: string;
+
+  /*   @Field()
+  eur!: string;
+
+  @Field()
+  eur_foil!: string;
+
+  @Field()
+  tix!: string; */
+}
 
 @Entity()
 @ObjectType()
@@ -16,15 +33,19 @@ export class CardPrice extends BaseEntity {
   @Column({ length: 16, nullable: true })
   usd_foil!: string;
 
-  @Field()
+  /*  @Field()
   @Column({ length: 16, nullable: true })
-  eur!: string;
+  usd_etched!: string; */
 
-  @Field()
+  /*  @Field()
   @Column({ length: 16, nullable: true })
-  eur_foil!: string;
+  eur!: string; */
 
-  @Field()
+  /*  @Field()
   @Column({ length: 16, nullable: true })
-  tix!: string;
+  eur_foil!: string; */
+
+  /*  @Field()
+  @Column({ length: 16, nullable: true })
+  tix!: string; */
 }

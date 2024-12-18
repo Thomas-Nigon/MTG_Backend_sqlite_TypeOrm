@@ -1,18 +1,9 @@
-import { Arg, Field, InputType } from "type-graphql";
+import { Arg, Field, InputType, Int } from "type-graphql";
 import { Query } from "type-graphql";
-import { Card } from "../typeDefs/cards.typeDefs";
+import { Card, CardQuery, set } from "../entities/cards.typeDefs";
 import { getCardsColors } from "../controllers/cardController";
 import { Like } from "typeorm";
-
-@InputType()
-class CardQuery {
-  @Field({ nullable: true })
-  rarity?: string;
-  @Field({ nullable: true })
-  colors?: string;
-  @Field({ nullable: true })
-  set?: string;
-}
+import { CardPaginationResponse } from "../entities/pagination.typeDefs";
 
 export class CardResolver {
   /**
@@ -35,12 +26,12 @@ export class CardResolver {
    * @returns {Promise<Card[]>} A promise that resolves to an array of Card objects.
    * @throws Will throw an error if no cards are found or if there is an error retrieving cards.
    */
-  @Query(() => [Card])
-  async getCardsQuery(
-    @Arg("page") page: number,
-    @Arg("size") size: number,
+  @Query(() => CardPaginationResponse)
+  async getCardsWithQuery(
+    @Arg("page", () => Int) page: number,
+    @Arg("size", () => Int) size: number,
     @Arg("data") data: CardQuery
-  ) {
+  ): Promise<CardPaginationResponse> {
     let whereClause = {};
     if (data.rarity) {
       whereClause = { ...whereClause, rarity: data.rarity as string };
@@ -51,7 +42,9 @@ export class CardResolver {
     if (data.set && data.set !== "all") {
       whereClause = { ...whereClause, set: data.set as string };
     }
-    whereClause = { ...whereClause, set: data.set as string };
+    if (data.type && data.type !== "all") {
+      whereClause = { ...whereClause, type_line: data.type as string };
+    }
 
     try {
       const [cards, total] = await Card.findAndCount({
@@ -65,13 +58,11 @@ export class CardResolver {
       if (cards.length === 0) {
         throw new Error("No cards found");
       }
-      return cards;
-      /*    return  {
-          data: cards,
-          total,
-          page,
-          pageCount: Math.ceil(total / size),
-        }; */
+      return {
+        cards,
+        totalCount: total,
+        pageCount: Math.ceil(total / size),
+      };
     } catch (error) {
       console.error(error);
       throw new Error("Error getting cards");
@@ -142,6 +133,31 @@ export class CardResolver {
     } catch (error) {
       console.log(error);
       throw new Error("Error getting card");
+    }
+  }
+
+  @Query(() => [set])
+  async getAllSets() {
+    try {
+      const sets = await Card.find({
+        select: ["set_name", "set"],
+        order: {
+          set_name: "ASC",
+        },
+      });
+      /*     const uniqueSets = [...new Set(sets.flatMap((set) => set.set_name))];
+      return uniqueSets; */
+      const uniqueSets = [
+        ...new Set(
+          sets.map((set) =>
+            JSON.stringify({ name: set.set_name, value: set.set })
+          )
+        ),
+      ].map((set) => JSON.parse(set));
+      return uniqueSets;
+    } catch (error) {
+      console.log(error);
+      throw new Error("Error getting sets");
     }
   }
 }

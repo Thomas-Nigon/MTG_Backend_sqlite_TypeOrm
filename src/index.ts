@@ -8,10 +8,11 @@ import { UserResolver } from "./resolvers/user.resolver";
 import { CardResolver } from "./resolvers/card.resolvers";
 import { populateDatabase } from "./libs/populatedBGraphQL";
 import { AuthResolver } from "./resolvers/auth.resolvers";
+import { DeckResolver } from "./resolvers/deck.resolvers";
 
 const main = async () => {
   const schema = await buildSchema({
-    resolvers: [UserResolver, CardResolver, AuthResolver],
+    resolvers: [UserResolver, CardResolver, AuthResolver, DeckResolver],
   });
 
   const server = new ApolloServer({ schema });
@@ -26,12 +27,13 @@ const main = async () => {
   });
 
   await dataSource.initialize();
-  //await populateDatabase();
+  //populateDatabase();
 
   console.log(`🚀  Server ready at: ${url}`);
 };
 
 main();
+
 /* 
 dotenv.config();
 

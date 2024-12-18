@@ -1,5 +1,14 @@
-import { Field, ID, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+@InputType()
+export class CardImageUrisInput {
+  @Field({})
+  small!: string;
+
+  @Field()
+  normal!: string;
+}
 
 @Entity()
 @ObjectType()

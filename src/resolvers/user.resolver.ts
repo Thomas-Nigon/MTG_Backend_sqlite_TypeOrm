@@ -1,20 +1,8 @@
 import { Arg, Field, InputType, Mutation, Query } from "type-graphql";
 
 import { Resolver } from "type-graphql";
-import { User } from "../typeDefs/user.typeDefs";
+import { User, UserInput } from "../entities/user.typeDefs";
 import { BaseEntity } from "typeorm";
-
-@InputType()
-export class UserInput extends BaseEntity {
-  @Field({ nullable: true })
-  username?: string;
-
-  @Field({ nullable: true })
-  email?: string;
-
-  @Field({ nullable: true })
-  password?: string;
-}
 
 @Resolver(User)
 export class UserResolver {
