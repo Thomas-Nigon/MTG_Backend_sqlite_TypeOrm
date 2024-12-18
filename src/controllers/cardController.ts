@@ -1,6 +1,6 @@
 import { query, Request, Response } from "express";
 import { Like } from "typeorm";
-import { Card } from "../entities/cards";
+import { Card } from "../entities/cards.typeDefs";
 
 export const getCards = async (req: Request, res: Response) => {
   const { page, size, rarity, colors, set } = req.query;

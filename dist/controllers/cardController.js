@@ -11,10 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSets = exports.getCardByName = exports.getCardsTypes = exports.getCardsColors = exports.getCards = void 0;
 const typeorm_1 = require("typeorm");
-const cards_1 = require("../entities/cards");
+const cards_typeDefs_1 = require("../entities/cards.typeDefs");
 const getCards = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, size, rarity, colors, set } = req.query;
-    console.log(set);
     let whereClause = {};
     if (rarity) {
         whereClause = Object.assign(Object.assign({}, whereClause), { rarity: rarity });
@@ -31,7 +30,7 @@ const getCards = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pageNumber = parseInt(page, 10) || 1;
     const pageSize = parseInt(size, 10) || 10;
     try {
-        const [cards, total] = yield cards_1.Card.findAndCount({
+        const [cards, total] = yield cards_typeDefs_1.Card.findAndCount({
             where: whereClause,
             take: pageSize,
             skip: (pageNumber - 1) * pageSize,
@@ -59,7 +58,7 @@ const getCards = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getCards = getCards;
 const getCardsColors = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const colors = yield cards_1.Card.find({
+        const colors = yield cards_typeDefs_1.Card.find({
             select: ["colors"],
         });
         const uniqueColors = [...new Set(colors.flatMap((color) => color.colors))];
@@ -78,7 +77,7 @@ const getCardsTypes = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         whereClause = Object.assign(Object.assign({}, whereClause), { type_line: type_line });
     }
     try {
-        const types = yield cards_1.Card.find({
+        const types = yield cards_typeDefs_1.Card.find({
             select: ["type_line"],
         });
         const uniqueTypes = [...new Set(types.flatMap((t) => t.type_line))];
@@ -93,7 +92,7 @@ exports.getCardsTypes = getCardsTypes;
 const getCardByName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const name = req.body.cardName;
     try {
-        const card = yield cards_1.Card.find({
+        const card = yield cards_typeDefs_1.Card.find({
             where: {
                 name: (0, typeorm_1.Like)(`%${name}%`),
             },
@@ -109,7 +108,7 @@ const getCardByName = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.getCardByName = getCardByName;
 const getSets = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const sets = yield cards_1.Card.find({
+        const sets = yield cards_typeDefs_1.Card.find({
             select: ["set_name", "set"],
             order: {
                 released_at: "DESC",

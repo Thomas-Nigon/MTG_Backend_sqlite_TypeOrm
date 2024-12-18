@@ -1,4 +1,4 @@
-import { Router } from "express";
+/* import { Router } from "express";
 import {
   getCardByName,
   getCards,
@@ -16,3 +16,4 @@ router.post("/cards/name", getCardByName);
 router.get("/cards/extensions", getSets);
 
 export default router;
+ */
