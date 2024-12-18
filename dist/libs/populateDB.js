@@ -34,10 +34,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.populateDatabase = populateDatabase;
 const db_1 = require("../config/db");
-const CardimageUris_1 = require("../entities/CardimageUris");
+const cardImageUris_typeDefs_1 = require("../entities/cardImageUris.typeDefs");
 const fs = __importStar(require("fs"));
-const CardPrice_1 = require("../entities/CardPrice");
-const cards_1 = require("../entities/cards");
+const cardPrice_typeDefs_1 = require("../entities/cardPrice.typeDefs");
+const cards_typeDefs_1 = require("../entities/cards.typeDefs");
 function populateDatabase() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -48,7 +48,7 @@ function populateDatabase() {
             // Iterate through each card object in the array
             for (const cardObj of cardsArray) {
                 console.log(cardObj.image_uris);
-                const imageUris = new CardimageUris_1.CardImageUris();
+                const imageUris = new cardImageUris_typeDefs_1.CardImageUris();
                 if (cardObj.image_uris && cardObj.image_uris.small) {
                     imageUris.small = cardObj.image_uris.small;
                 }
@@ -62,7 +62,7 @@ function populateDatabase() {
                     imageUris.normal = "no_image";
                 }
                 console.log("MYCARD URLS", imageUris);
-                const cardPrice = new CardPrice_1.CardPrice();
+                const cardPrice = new cardPrice_typeDefs_1.CardPrice();
                 if (cardObj.prices && cardObj.prices.usd) {
                     cardPrice.usd = cardObj.prices.usd;
                 }
@@ -77,7 +77,7 @@ function populateDatabase() {
                 }
                 console.log("MYCARD PRICE", cardPrice);
                 // Create the Card entity
-                const card = new cards_1.Card();
+                const card = new cards_typeDefs_1.Card();
                 card.card_id = cardObj.id;
                 card.oracle_id = cardObj.oracle_id;
                 card.name = cardObj.name;

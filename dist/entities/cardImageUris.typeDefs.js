@@ -9,23 +9,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CardImageUris = void 0;
+exports.CardImageUris = exports.CardImageUrisInput = void 0;
+const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
+let CardImageUrisInput = class CardImageUrisInput {
+};
+exports.CardImageUrisInput = CardImageUrisInput;
+__decorate([
+    (0, type_graphql_1.Field)({}),
+    __metadata("design:type", String)
+], CardImageUrisInput.prototype, "small", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], CardImageUrisInput.prototype, "normal", void 0);
+exports.CardImageUrisInput = CardImageUrisInput = __decorate([
+    (0, type_graphql_1.InputType)()
+], CardImageUrisInput);
 let CardImageUris = class CardImageUris extends typeorm_1.BaseEntity {
 };
 exports.CardImageUris = CardImageUris;
 __decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], CardImageUris.prototype, "id", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)({ length: 255, nullable: true }),
     __metadata("design:type", String)
 ], CardImageUris.prototype, "small", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(),
     (0, typeorm_1.Column)({ length: 255, nullable: true }),
     __metadata("design:type", String)
 ], CardImageUris.prototype, "normal", void 0);
 exports.CardImageUris = CardImageUris = __decorate([
-    (0, typeorm_1.Entity)()
+    (0, typeorm_1.Entity)(),
+    (0, type_graphql_1.ObjectType)()
 ], CardImageUris);

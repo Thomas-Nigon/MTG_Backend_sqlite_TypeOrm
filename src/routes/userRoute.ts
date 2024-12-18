@@ -1,4 +1,4 @@
-import { Router } from "express";
+/* import { Router } from "express";
 
 import { createUser, getUsers } from "../controllers/userController";
 import hashPassword from "../middleware/hashPassword";
@@ -12,3 +12,4 @@ router.post("/users/auth", auth);
 router.post("/users/create", hashPassword, createUser);
 
 export default router;
+ */

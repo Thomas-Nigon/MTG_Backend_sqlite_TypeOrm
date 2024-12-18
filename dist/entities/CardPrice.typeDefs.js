@@ -9,48 +9,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Ad = void 0;
+exports.CardPrice = exports.CardPriceInput = void 0;
+const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
-const category_1 = require("./category");
-let Ad = class Ad extends typeorm_1.BaseEntity {
+let CardPriceInput = class CardPriceInput {
 };
-exports.Ad = Ad;
+exports.CardPriceInput = CardPriceInput;
 __decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], CardPriceInput.prototype, "usd", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(),
+    __metadata("design:type", String)
+], CardPriceInput.prototype, "usd_foil", void 0);
+exports.CardPriceInput = CardPriceInput = __decorate([
+    (0, type_graphql_1.InputType)()
+], CardPriceInput);
+let CardPrice = class CardPrice extends typeorm_1.BaseEntity {
+};
+exports.CardPrice = CardPrice;
+__decorate([
+    (0, type_graphql_1.Field)(() => type_graphql_1.ID),
     (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
-], Ad.prototype, "id", void 0);
+], CardPrice.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ length: 255 }),
+    (0, type_graphql_1.Field)(),
+    (0, typeorm_1.Column)({ length: 16, nullable: true }),
     __metadata("design:type", String)
-], Ad.prototype, "title", void 0);
+], CardPrice.prototype, "usd", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, type_graphql_1.Field)(),
+    (0, typeorm_1.Column)({ length: 16, nullable: true }),
     __metadata("design:type", String)
-], Ad.prototype, "description", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Ad.prototype, "author", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Ad.prototype, "price", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Date)
-], Ad.prototype, "created_at", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Ad.prototype, "img_url", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", String)
-], Ad.prototype, "city", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => category_1.Category, (category) => category.ads),
-    __metadata("design:type", category_1.Category)
-], Ad.prototype, "category", void 0);
-exports.Ad = Ad = __decorate([
-    (0, typeorm_1.Entity)()
-], Ad);
+], CardPrice.prototype, "usd_foil", void 0);
+exports.CardPrice = CardPrice = __decorate([
+    (0, typeorm_1.Entity)(),
+    (0, type_graphql_1.ObjectType)()
+], CardPrice);
