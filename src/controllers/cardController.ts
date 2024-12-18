@@ -4,7 +4,6 @@ import { Card } from "../entities/cards";
 
 export const getCards = async (req: Request, res: Response) => {
   const { page, size, rarity, colors, set } = req.query;
-  console.log(set);
   let whereClause = {};
   if (rarity) {
     whereClause = { ...whereClause, rarity: rarity as string };

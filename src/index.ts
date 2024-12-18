@@ -1,12 +1,40 @@
-import express from "express";
-import dotenv from "dotenv";
+import "dotenv/config";
 import "reflect-metadata";
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import { buildSchema } from "type-graphql";
 import { dataSource } from "./config/db";
-import cardRoute from "./routes/CardRoute";
-import categoryRoute from "./routes/categoryRoute";
-import userRoute from "./routes/userRoute";
-import deckRoute from "./routes/deckRoute";
+import { UserResolver } from "./resolvers/user.resolver";
+import { CardResolver } from "./resolvers/card.resolvers";
+import { populateDatabase } from "./libs/populatedBGraphQL";
+import { AuthResolver } from "./resolvers/auth.resolvers";
+import { DeckResolver } from "./resolvers/deck.resolvers";
 
+const main = async () => {
+  const schema = await buildSchema({
+    resolvers: [UserResolver, CardResolver, AuthResolver, DeckResolver],
+  });
+
+  const server = new ApolloServer({ schema });
+
+  const { url } = await startStandaloneServer(server, {
+    listen: { port: 4000 },
+    context: async ({ req, res }) => {
+      // Get the user token from the headers.
+      const token = req.headers.authorization || "no token";
+      return token;
+    },
+  });
+
+  await dataSource.initialize();
+  //populateDatabase();
+
+  console.log(`🚀  Server ready at: ${url}`);
+};
+
+main();
+
+/* 
 dotenv.config();
 
 const app = express();
@@ -43,3 +71,4 @@ app.listen(port, async () => {
 });
 
 export default app;
+ */
