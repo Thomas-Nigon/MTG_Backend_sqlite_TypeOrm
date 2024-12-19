@@ -1,7 +1,6 @@
 import { Arg, Field, InputType, Int } from "type-graphql";
 import { Query } from "type-graphql";
 import { Card, CardQuery, set } from "../entities/cards.typeDefs";
-import { getCardsColors } from "../controllers/cardController";
 import { Like } from "typeorm";
 import { CardPaginationResponse } from "../entities/pagination.typeDefs";
 
