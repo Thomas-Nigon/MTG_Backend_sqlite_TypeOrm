@@ -121,7 +121,7 @@ export class Card extends BaseEntity {
   image_uris!: CardImageUris;
 
   @Field()
-  @Column({ length: 8, nullable: true })
+  @Column({ length: 255, nullable: true })
   mana_cost!: string;
 
   @Field()

@@ -1,65 +1,38 @@
 # MTG Backend with SQLite and TypeORM
 
-This is a backend project built using **Express.js**, **SQLite**, and **TypeORM**. The application is designed to manage a Magic: The Gathering (MTG) card collection, providing endpoints for retrieving and managing card data.
+This is a backend project built using **Apollo Server**, **PostgreSQL**, and **TypeORM**. The application is designed to manage a Magic: The Gathering (MTG) card collection, providing endpoints for retrieving and managing card data.
 
 ## Features
 
-- **Express.js**: A fast, minimalist web framework for Node.js.
-- **SQLite**: A lightweight, serverless SQL database engine.
+- **Apollo Server**: A GraphQL server for Node.js.
+- **GraphQL**: A query language for APIs and a runtime for fulfilling those queries with your existing data.
+- **PostgreSQL**: A powerful, open-source relational database management system.
 - **TypeORM**: A TypeScript ORM to manage database models and queries.
-- **REST API**: Endpoints for creating, reading, updating, and deleting card information.
 
 ## Prerequisites
 
 To run this project, you'll need to have the following installed:
 
-- **Node.js** (version X.X.X or higher)
+- **Node.js**
 - **npm** or **yarn**
 
-## Getting Started
+## GraphQL API
 
-1. **Clone the repository**:
+The application now uses GraphQL for API requests. Below are some examples of queries and mutations you can perform:
 
-   \`\`\`bash
-   git clone https://github.com/Thomas-Nigon/MTG_Backend_sqlite_TypeOrm.git
-   cd MTG_Backend_sqlite_TypeOrm
-   \`\`\`
+### Queries
 
-2. **Install dependencies**:
-
-   Using npm:
-
-   \`\`\`bash
-   npm install
-   \`\`\`
-
-   Or using yarn:
-
-   \`\`\`bash
-   yarn install
-   \`\`\`
-
-3. **Set up SQLite database**:
-
-   TypeORM will automatically generate and synchronize the database schema based on your models.
-
-4. **Run the server**:
-
-   \`\`\`bash
-   npm start
-   \`\`\`
-
-   The server will start at \`http://localhost:4000\`.
-
-## API Endpoints
-
-| Method | Endpoint       | Description                        |
-| ------ | -------------- | ---------------------------------- |
-| GET    | \`/cards\`     | Retrieves all MTG cards            |
-| GET    | \`/cards/:id\` | Retrieves a specific card by ID    |
-| POST   | \`/cards\`     | Adds a new card to the collection  |
-| PUT    | \`/cards/:id\` | Updates a card's information       |
-| DELETE | \`/cards/:id\` | Deletes a card from the collection |
+- **Retrieve all MTG cards**:
+  ```graphql
+  {
+    cards {
+      id
+      name
+      type
+      ...
+    }
+  }
+  ```
 
 ## Project Structure
 
@@ -70,25 +43,28 @@ MTG_Backend_sqlite_TypeOrm/
 │   ├── entities/
 │   │   ├── Card.ts
 │   │   └── CardImageUris.ts
-│   ├── routes/
-│   │   └── cardRoutes.ts
-│   ├── controllers/
-│   │   └── cardController.ts
+│   ├── resolvers/
+│   │   └── cardResolver.ts
+│   ├── schema/
+│   │   └── cardSchema.graphql
 │   └── app.ts
 │
 ├── .env.example
-├── ormconfig.json
+├── docker-compose.yaml
+├── Dockerfile
 ├── package.json
 └── README.md
 
 
-- **Entities**: Defines the data models for the MTG cards and their associated image URIs.
-- **Routes**: Contains the API routes for card-related actions.
-- **Controllers**: Handles the logic behind each API endpoint.
+- **Entities**: Defines the data models for the MTG cards and their associated image URIs Database Schema.
+- **Resolvers**: Contains the GraphQL resolvers for handling queries and mutations.
+- **App.ts**: The main entry point for the application, setting up the server and middleware.
+- **Docker**: Configuration files for containerizing the application.
+- **Environment Configuration**: Example file for setting up environment variables.
 
 ## Database
 
-- **SQLite** is used for the local development database.
+- **PostgreSQL** is used for the local development database.
 - **TypeORM** handles database schema and queries.
 
 ## License
@@ -131,10 +107,14 @@ Ensure you have the following installed on your machine:
    Once the containers are up and running, the backend server will be accessible at:
 
    ```
-   http://localhost:5050
+   http://localhost:4000
    ```
 
-   You can interact with the API endpoints as described in the API Endpoints section of this README.
+   The vizualizer will be accessible at:
+
+   ```
+   http://localhost:7001/vizualizer
+   ```
 
 4. **Stopping the containers**:
 
