@@ -1,7 +1,7 @@
 import { dataSource } from "../config/db";
 import { CardImageUris } from "../entities/cardImageUris.typeDefs";
 import * as fs from "fs";
-import { CardPrice } from "../entities/cardPrice.typeDefs";
+import { CardPrice } from "../entities/CardPrice.typeDefs";
 import { Card } from "../entities/cards.typeDefs";
 
 export async function populateDatabase() {

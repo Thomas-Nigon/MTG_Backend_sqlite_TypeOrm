@@ -10,7 +10,7 @@ import {
 } from "typeorm";
 import { CardStack, CardStackInput } from "./cardStack.typeDefs";
 import { CardImageUris, CardImageUrisInput } from "./cardImageUris.typeDefs";
-import { CardPrice, CardPriceInput } from "./cardPrice.typeDefs";
+import { CardPrice, CardPriceInput } from "./CardPrice.typeDefs";
 
 @InputType()
 export class CardQuery {
